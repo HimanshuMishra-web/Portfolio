@@ -1,0 +1,12 @@
+This directory should contain project screenshot images.
+
+For each project, create images with the following naming convention:
+- smartcv-1.jpg, smartcv-2.jpg, smartcv-3.jpg, smartcv-4.jpg
+- trading-app-1.jpg, trading-app-2.jpg, trading-app-3.jpg
+- internal-tool-1.jpg, internal-tool-2.jpg, internal-tool-3.jpg
+- portfolio-1.jpg, portfolio-2.jpg, portfolio-3.jpg
+- weather-app-1.jpg, weather-app-2.jpg, weather-app-3.jpg
+- ecommerce-1.jpg, ecommerce-2.jpg, ecommerce-3.jpg
+
+You can use any screenshot tool or design software to create these images.
+Recommended dimensions: 1200x800 pixels for optimal display. 
