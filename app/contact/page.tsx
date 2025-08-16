@@ -4,9 +4,10 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Mail, Phone, MapPin, Send, Github, Linkedin } from 'lucide-react'
 import { contactInfo, socialLinks, personalInfo } from '../../data'
+import { validateContactForm, sanitizeInput, type ContactFormData } from '../utils/validation'
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
@@ -14,25 +15,77 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [lastSubmitTime, setLastSubmitTime] = useState(0)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Don't sanitize during typing - only sanitize when submitting
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     })
+    // Clear error status when user starts typing
+    if (submitStatus === 'error') {
+      setSubmitStatus('idle')
+      setErrorMessage('')
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Sanitize the form data before validation and submission
+    const sanitizedData = {
+      name: sanitizeInput(formData.name),
+      email: sanitizeInput(formData.email),
+      subject: sanitizeInput(formData.subject),
+      message: sanitizeInput(formData.message),
+    }
+    
+    // Client-side validation
+    const validation = validateContactForm(sanitizedData)
+    if (!validation.isValid) {
+      setSubmitStatus('error')
+      setErrorMessage(validation.errors.join(', '))
+      return
+    }
+    
+    // Simple rate limiting - prevent multiple submissions within 5 seconds
+    const now = Date.now()
+    if (now - lastSubmitTime < 5000) {
+      setSubmitStatus('error')
+      setErrorMessage('Please wait a few seconds before submitting again.')
+      return
+    }
+    
     setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+    setLastSubmitTime(now)
 
-    // Simulate form submission (replace with actual EmailJS or API call)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setSubmitStatus('success')
-      setFormData({ name: '', email: '', subject: '', message: '' })
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(sanitizedData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        setFormData({ name: '', email: '', subject: '', message: '' })
+      } else {
+        setSubmitStatus('error')
+        setErrorMessage(data.error || 'Something went wrong. Please try again.')
+        console.error('Form submission error:', data.error)
+      }
     } catch (error) {
       setSubmitStatus('error')
+      setErrorMessage('Network error. Please check your connection and try again.')
+      console.error('Network error:', error)
     } finally {
       setIsSubmitting(false)
     }
@@ -185,11 +238,11 @@ export default function Contact() {
                   animate={{ opacity: 1, y: 0 }}
                   className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300"
                 >
-                  Something went wrong. Please try again later.
+                  {errorMessage || 'Something went wrong. Please try again later.'}
                 </motion.div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className={`space-y-6 ${isSubmitting ? 'pointer-events-none opacity-75' : ''}`}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label
@@ -270,20 +323,24 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full btn-primary text-lg py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full text-lg py-3 transition-all duration-200 ${
+                    isSubmitting 
+                      ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' 
+                      : 'btn-primary'
+                  }`}
                   whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
                   whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 >
                   {isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Sending...
+                    <div className="flex items-center justify-center text-white">
+                      <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
+                      <span className="font-medium">Sending Message...</span>
                     </div>
                   ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      Send Message
-                    </>
+                    <div className="flex items-center justify-center">
+                      <Send className="w-5 h-5 mr-2" />
+                      <span className="font-medium">Send Message</span>
+                    </div>
                   )}
                 </motion.button>
               </form>

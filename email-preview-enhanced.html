@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Email Template Preview</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      line-height: 1.6;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .header {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header h1 {
+      color: white;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .header p {
+      color: rgba(255, 255, 255, 0.9);
+      margin: 8px 0 0;
+      font-size: 16px;
+    }
+    .content {
+      padding: 32px 24px;
+    }
+    .contact-info {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border-left: 4px solid #2563eb;
+    }
+    .contact-info h2 {
+      color: #1f2937;
+      margin: 0 0 16px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .contact-grid {
+      display: grid;
+      gap: 12px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .contact-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #2563eb;
+      border-radius: 50%;
+    }
+    .contact-label {
+      color: #6b7280;
+      font-weight: 500;
+      min-width: 60px;
+    }
+    .contact-value {
+      color: #1f2937;
+      font-weight: 600;
+    }
+    .contact-email {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .message-box {
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .message-box h3 {
+      color: #1f2937;
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .message-content {
+      color: #374151;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .quick-actions {
+      background-color: #eff6ff;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .quick-actions h3 {
+      color: #1e40af;
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background-color: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .btn-secondary {
+      background-color: #6b7280;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .footer {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 24px;
+      text-align: center;
+    }
+    .footer p {
+      color: #6b7280;
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+    .footer small {
+      color: #9ca3af;
+      margin: 0;
+      font-size: 12px;
+    }
+    .bottom-banner {
+      background-color: #1f2937;
+      padding: 16px 24px;
+      text-align: center;
+    }
+    .bottom-banner p {
+      color: #9ca3af;
+      margin: 0;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>New Contact Message</h1>
+      <p>Someone reached out through your portfolio</p>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h2>Contact Information</h2>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="contact-dot"></div>
+            <span class="contact-label">Name:</span>
+            <span class="contact-value">John Doe</span>
+          </div>
+          <div class="contact-item">
+            <div class="contact-dot"></div>
+            <span class="contact-label">Email:</span>
+            <a href="mailto:john.doe@example.com" class="contact-email">john.doe@example.com</a>
+          </div>
+          <div class="contact-item">
+            <div class="contact-dot"></div>
+            <span class="contact-label">Subject:</span>
+            <span class="contact-value">Project Collaboration Opportunity</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="message-box">
+        <h3>Message</h3>
+        <div class="message-content">Hi Himanshu,
+
+I came across your portfolio and I'm really impressed with your work! I'm looking for a skilled developer to help with a React-based project, and your experience with modern web technologies seems like a perfect fit.
+
+The project involves building a dashboard application with real-time data visualization. I'd love to discuss this opportunity with you and see if we can work together.
+
+Looking forward to hearing from you!
+
+Best regards,
+John</div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+          <a href="mailto:john.doe@example.com?subject=Re: Project Collaboration Opportunity" class="btn-primary">Reply via Email</a>
+          <a href="https://himanshu-portfolio.vercel.app" class="btn-secondary">View Portfolio</a>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>This message was sent from your portfolio contact form</p>
+        <small>December 15, 2024 at 2:30 PM EST</small>
+      </div>
+    </div>
+
+    <!-- Bottom Banner -->
+    <div class="bottom-banner">
+      <p>© 2024 Himanshu Mishra - Full Stack Developer</p>
+    </div>
+  </div>
+</body>
+</html>
