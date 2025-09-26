@@ -70,5 +70,37 @@ Key features include:
       'Integrated social media APIs for instant sharing',
       'Designed an intuitive community interface with real-time updates'
     ]
+  },
+  {
+    "id": 6,
+    "title": "AI Chatbot Assistant",
+    "description": "An intelligent conversational AI chatbot built with Next.js, featuring natural language processing, knowledge base integration, and real-time chat capabilities.",
+    "longDescription": "AI Chatbot Assistant is a sophisticated conversational AI platform designed to provide intelligent responses and assistance through natural language processing. Built with modern web technologies, it features a seamless chat interface, knowledge base integration for accurate information retrieval, and scalable architecture for high-performance interactions.\n\nThe platform leverages advanced AI models to understand user queries, maintain context in conversations, and provide relevant, helpful responses. It includes features for document indexing, vector search for knowledge retrieval, and a user-friendly interface for both desktop and mobile devices.\n\nKey features include:\n• Intelligent conversation handling with context awareness\n• Knowledge base integration with document indexing\n• Real-time chat interface with typing indicators\n• Vector search for accurate information retrieval\n• Responsive design for all devices\n• API endpoints for chat and indexing\n• Data storage with vector and document stores\n• Scalable architecture with Next.js and Node.js\n• TypeScript for type safety and maintainability\n• Tailwind CSS for modern, responsive UI",
+    "image": "/projects/chatbot/home.webp",
+    "screenshots": [
+      "/projects/chatbot/home.webp",
+      "/projects/chatbot/chat.webp",
+      "/projects/chatbot/settings.webp"
+    ],
+    "technologies": ["Next.js", "TypeScript", "Tailwind CSS", "Node.js", "AI Integration", "Vector Search"],
+    "githubUrl": "https://github.com/HimanshuMishra-web/chatbot",
+    "liveUrl": "https://portfolio-chat-bot-three.vercel.app/",
+    "date": "2025",
+    "duration": "1 week",
+    "teamSize": "Solo",
+    "category": "AI Chatbot",
+    "featured": true,
+    "challenges": [
+      "Implementing advanced AI conversation logic",
+      "Building scalable real-time chat interface",
+      "Integrating vector search for knowledge retrieval",
+      "Ensuring accurate and context-aware responses"
+    ],
+    "solutions": [
+      "Used state-of-the-art AI models with optimized prompting",
+      "Built responsive chat UI with WebSocket-like real-time updates",
+      "Implemented vector embeddings for efficient knowledge search",
+      "Added comprehensive validation and context management"
+    ],
   }
 ] 
