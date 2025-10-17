@@ -1,15 +1,20 @@
+export const runtime = 'nodejs';
+
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import dbConnect from '@/lib/mongodb'
+import Enquiry from '@/models/Enquiry'
+import { sendEnquiryNotification } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
-  try {
-    
+   try {
+     await dbConnect();
 
-    // Rate limiting check (simple implementation)
-    const clientIP = request.headers.get('x-forwarded-for') || request.ip || 'unknown'
-    
-    const body = await request.json()
-    const { name, email, subject, message } = body
+     // Rate limiting check (simple implementation)
+     const clientIP = request.headers.get('x-forwarded-for') || request.ip || 'unknown'
+
+     const body = await request.json()
+     const { name, email, subject, message, projectType, budget, timeline } = body
 
     // Sanitize inputs
     const sanitizedName = name?.trim().replace(/[<>]/g, '') || ''
@@ -186,12 +191,34 @@ export async function POST(request: NextRequest) {
       `
     }
 
+    // Save enquiry to database
+    const enquiryData = {
+      name: sanitizedName,
+      email: sanitizedEmail,
+      subject: sanitizedSubject,
+      message: sanitizedMessage,
+      projectType: projectType || 'other',
+      budget: budget || 'not-specified',
+      timeline: timeline || 'not-specified',
+    };
+
+    const enquiry = new Enquiry(enquiryData);
+    await enquiry.save();
+
+    // Send email notification to admin
+    try {
+      await sendEnquiryNotification(enquiry);
+    } catch (emailError) {
+      console.error('Error sending email notification:', emailError);
+      // Don't fail the request if email fails
+    }
+
     // Send email
     const info = await transporter.sendMail(mailOptions)
 
     if (info.messageId) {
       return NextResponse.json(
-        { message: 'Email sent successfully' },
+        { message: 'Enquiry submitted successfully' },
         { status: 200 }
       )
     } else {

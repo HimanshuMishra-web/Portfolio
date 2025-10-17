@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Header from './components/Header'
-import Footer from './components/Footer'
 import { ThemeProvider } from './components/ThemeProvider'
+import AppLayout from './components/AppLayout'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://himanshu-mishra.vercel.app'),
   title: 'Himanshu Mishra - Full-Stack Developer',
   description: 'Full-Stack Developer from India specializing in React, Node.js, and modern web technologies.',
   keywords: ['Full-Stack Developer', 'React', 'Node.js', 'JavaScript', 'TypeScript', 'MongoDB', 'Web Development'],
@@ -53,13 +53,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <AppLayout>
+            {children}
+          </AppLayout>
         </ThemeProvider>
       </body>
     </html>

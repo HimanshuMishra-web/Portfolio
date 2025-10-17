@@ -64,7 +64,7 @@ export default function Contact() {
     setLastSubmitTime(now)
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('/api/enquiries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export default function Contact() {
 
       const data = await response.json()
 
-      if (response.ok) {
+      if (response.ok && data.success) {
         setSubmitStatus('success')
         setFormData({ name: '', email: '', subject: '', message: '' })
       } else {
