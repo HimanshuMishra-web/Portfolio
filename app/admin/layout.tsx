@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Home, MessageSquare, Sun, Moon, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { Menu, X, Home, MessageSquare, Sun, Moon, LogOut, FileText, Layers, Tag } from 'lucide-react';
 import { useTheme } from '../components/ThemeProvider';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -15,6 +14,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const menuItems = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Enquiry', href: '/admin/enquiry', icon: MessageSquare },
+    { name: 'Manage Blogs', href: '/admin/blogs', icon: FileText },
+    { name: 'Manage Templates', href: '/admin/templates', icon: Layers },
+    { name: 'Manage Topics', href: '/admin/topics', icon: Tag },
   ];
 
   const toggleTheme = () => {
@@ -43,17 +45,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex" suppressHydrationWarning>
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out translate-x-0">
         <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 md:hidden"
-          >
-            <X size={20} />
-          </button>
         </div>
         <nav className="mt-8 px-4">
           <ul className="space-y-2">
@@ -97,16 +91,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <div className="flex-1 transition-all duration-300 ease-in-out ml-64">
         {/* Top Bar */}
         <div className="relative z-50 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between h-16 px-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            >
-              {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-            </button>
             <div className="flex items-center space-x-4">
               <Link
                 href="/"
@@ -125,12 +113,10 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      <div
+        className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+        onClick={() => {}}
+      />
     </div>
   );
 };
