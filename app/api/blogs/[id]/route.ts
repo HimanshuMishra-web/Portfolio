@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import dbConnect from '../../../../lib/mongodb';
 import Blog from '../../../../models/Blog';
+import Topic from '../../../../models/Topic';
+import BlogTemplate from '../../../../models/BlogTemplate';
+import User from '../../../../models/User';
+
+function getFilter(id: string) {
+  return mongoose.isValidObjectId(id) ? { _id: id } : { slug: id };
+}
 
 export async function GET(
   request: NextRequest,
@@ -9,7 +17,7 @@ export async function GET(
   try {
     await dbConnect();
 
-    const blog = await Blog.findById(params.id)
+    const blog = await Blog.findOne(getFilter(params.id))
       .populate('topics', 'name slug')
       .populate('templateUsed', 'name')
       .populate('publishedBy', 'name');
@@ -42,13 +50,13 @@ export async function PUT(
     await dbConnect();
 
     const { action, ...updateData } = await request.json();
+    const filter = getFilter(params.id);
 
     if (action === 'publish') {
-      // Get current user from session/auth - simplified for now
       const publishedBy = 'admin'; // This should come from auth
 
-      const blog = await Blog.findByIdAndUpdate(
-        params.id,
+      const blog = await Blog.findOneAndUpdate(
+        filter,
         {
           status: 'published',
           publishedAt: new Date(),
@@ -72,8 +80,8 @@ export async function PUT(
     }
 
     if (action === 'unpublish') {
-      const blog = await Blog.findByIdAndUpdate(
-        params.id,
+      const blog = await Blog.findOneAndUpdate(
+        filter,
         {
           status: 'unpublished',
           publishedAt: null,
@@ -97,7 +105,7 @@ export async function PUT(
     }
 
     // General update
-    const blog = await Blog.findByIdAndUpdate(params.id, updateData, { new: true });
+    const blog = await Blog.findOneAndUpdate(filter, updateData, { new: true });
 
     if (!blog) {
       return NextResponse.json(
@@ -127,7 +135,7 @@ export async function DELETE(
   try {
     await dbConnect();
 
-    const blog = await Blog.findByIdAndDelete(params.id);
+    const blog = await Blog.findOneAndDelete(getFilter(params.id));
 
     if (!blog) {
       return NextResponse.json(

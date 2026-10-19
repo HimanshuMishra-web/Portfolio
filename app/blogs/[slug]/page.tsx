@@ -2,6 +2,12 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, User, Tag, ArrowLeft } from 'lucide-react';
+import mongoose from 'mongoose';
+import dbConnect from '@/lib/mongodb';
+import Blog from '@/models/Blog';
+import Topic from '@/models/Topic';
+
+export const dynamic = 'force-dynamic';
 
 interface BlogPost {
   _id: string;
@@ -18,16 +24,25 @@ interface BlogPost {
 
 async function getBlogBySlug(slug: string): Promise<BlogPost | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blogs/${slug}`, {
-      cache: 'no-store'
-    });
+    if (!process.env.MONGODB_URI) {
+      return null;
+    }
+    await dbConnect();
 
-    if (!response.ok) {
+    const isObjectId = mongoose.isValidObjectId(slug);
+    const query = isObjectId
+      ? { $or: [{ slug }, { _id: slug }], status: 'published' }
+      : { slug, status: 'published' };
+
+    const blog = await Blog.findOne(query)
+      .populate('topics', 'name slug')
+      .lean();
+
+    if (!blog) {
       return null;
     }
 
-    const data = await response.json();
-    return data.blog || null;
+    return JSON.parse(JSON.stringify(blog));
   } catch (error) {
     console.error('Error fetching blog:', error);
     return null;

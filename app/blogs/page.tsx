@@ -1,6 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Calendar, User, Tag } from 'lucide-react';
+import mongoose from 'mongoose';
+import dbConnect from '@/lib/mongodb';
+import Blog from '@/models/Blog';
+import Topic from '@/models/Topic';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Blog | Himanshu Portfolio',
@@ -19,32 +25,41 @@ interface BlogPost {
 
 async function getPublishedBlogs(topic?: string): Promise<BlogPost[]> {
   try {
-    const url = new URL(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blogs`);
-    url.searchParams.set('status', 'published');
-    url.searchParams.set('limit', '20');
+    if (!process.env.MONGODB_URI) {
+      return [];
+    }
+    await dbConnect();
+
+    const query: any = { status: 'published' };
 
     if (topic) {
-      url.searchParams.set('topic', topic);
+      const topicDoc = await Topic.findOne({ slug: topic });
+      if (topicDoc) {
+        query.topics = topicDoc._id;
+      } else if (mongoose.isValidObjectId(topic)) {
+        query.topics = topic;
+      }
     }
 
-    const response = await fetch(url.toString(), {
-      cache: 'no-store' // Ensure fresh data
-    });
+    const blogs = await Blog.find(query)
+      .populate('topics', 'name slug')
+      .sort({ publishedAt: -1, createdAt: -1 })
+      .limit(20)
+      .lean();
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch blogs');
-    }
-
-    const data = await response.json();
-    return data.blogs || [];
+    return JSON.parse(JSON.stringify(blogs));
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return [];
   }
 }
 
-export default async function BlogsPage() {
-  const blogs = await getPublishedBlogs();
+export default async function BlogsPage({
+  searchParams,
+}: {
+  searchParams?: { topic?: string };
+}) {
+  const blogs = await getPublishedBlogs(searchParams?.topic);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
