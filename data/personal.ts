@@ -84,7 +84,7 @@ export const contactInfo: ContactInfo = {
 
 export const aboutData = {
   summary: `I'm a Full Stack Developer passionate about creating innovative web solutions. With expertise in modern JavaScript frameworks and cloud technologies, I build scalable applications that solve real-world problems.`,
-  
+
   highlights: [
     '3+ years of professional development experience',
     'Expert in React, TypeScript, and Node.js',
@@ -93,7 +93,7 @@ export const aboutData = {
     'Agile development and team collaboration',
     'Open source contributor and community advocate'
   ],
-  
+
   interests: [
     'Artificial Intelligence and Machine Learning',
     'Web Performance Optimization',
@@ -102,7 +102,7 @@ export const aboutData = {
     'Mentoring Junior Developers',
     'Attending Tech Conferences and Meetups'
   ],
-  
+
   goals: [
     'Contribute to impactful open-source projects',
     'Master advanced cloud architecture patterns',
@@ -114,7 +114,7 @@ export const aboutData = {
 
 export const statsData = {
   projects: 25,
-  experience: '3+ years',
+  experience: '4+ years',
   technologies: 15,
   clients: 12,
   satisfaction: '100%',
